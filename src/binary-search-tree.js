@@ -69,10 +69,33 @@ module.exports = class BinarySearchTree {
     return check(this.rootNode, value)
   }
 
+  leftPlusRight(source, item) {
+    if (!source) { return item }
+    if (!item) { return source }
+    if (source.right) {
+        return {
+            data: source.data,
+            left: source.left,
+            right: this.leftPlusRight(source.right, item) 
+        }
+    } else {
+        return {
+            data: source.data,
+            left: source.left,
+            right: item
+        }
+    }
+  }
+
   remove(value) {
     const removeNode = ( node, v ) => {
-        if (!node || node.data === v) {
+        console.log(node)
+        console.log(!node)
+        if (!node) {
             return null
+        }
+        if (node.data === v) {
+            return this.leftPlusRight(node.left, node.right)
         }
         if ( v < node.data) {
             return {
@@ -93,25 +116,21 @@ module.exports = class BinarySearchTree {
   }
 
   min() {
-    throw new NotImplementedError('Not implemented');
-
-    // const checkMin = (node) => {
-    //   if (!node) { return null }
-    //   if (!node.left) { return node.data }
-    //   return checkMin(node.left)
-    // }
-    // return checkMin(this.rootNode)
+    const checkMin = (node) => {
+      if (!node) { return null }
+      if (!node.left) { return node.data }
+      return checkMin(node.left)
+    }
+    return checkMin(this.rootNode)
   }
   
   max() {
-    throw new NotImplementedError('Not implemented');
-
-    // const checkMax = (node) => {
-    //   if (!node) { return null }
-    //   if (!node.right) { return node.data }
-    //   return checkMax(node.right)
-    // }
-    // return checkMin(this.rootNode)
+    const checkMax = (node) => {
+      if (!node) { return null }
+      if (!node.right) { return node.data }
+      return checkMax(node.right)
+    }
+    return checkMax(this.rootNode)
   }
 
 }
