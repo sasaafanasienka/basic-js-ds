@@ -8,39 +8,110 @@ const { NotImplementedError } = require('../extensions/index.js');
 */
 module.exports = class BinarySearchTree {
 
+  constructor() {
+    this.rootNode = null
+  }
+
   root() {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+    return this.rootNode
   }
 
-  add(/* data */) {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+  add(value) {
+
+    const addValue = (node,v) => {
+
+        if (!node) {
+            return {
+                data: v,
+                left: null,
+                right: null,
+            }
+        }
+
+        const newLeft = v > node.data ? node.left : addValue(node.left, v)
+        const newRight = v < node.data ? node.right : addValue(node.right, v)
+
+        return {
+            data: node.data,
+            left: newLeft,
+            right: newRight
+        }
+    }
+
+    this.rootNode = addValue(this.rootNode, value)
   }
 
-  has(/* data */) {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+  has(value) {
+    const check = (node, v) => {
+        if (!node) { return false }
+        if (node.data === v) { return true }
+        if (v < node.data) {
+          return node.left ? check(node.left, v) : false
+        }
+        if (v > node.data) {
+          return node.right ? check(node.right, v) : false
+        } 
+      }
+      return check(this.rootNode, value)
+    }
+    
+    find(value) {
+      const check = (node, v) => {
+      if (!node) { return null }
+      if (node.data === v) { return node }
+      if (v < node.data) {
+        return node.left ? check(node.left, v) : null
+      }
+      if (v > node.data) {
+        return node.right ? check(node.right, v) : null
+      } 
+    }
+    return check(this.rootNode, value)
   }
 
-  find(/* data */) {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
-  }
-
-  remove(/* data */) {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+  remove(value) {
+    const removeNode = ( node, v ) => {
+        if (!node || node.data === v) {
+            return null
+        }
+        if ( v < node.data) {
+            return {
+                data: node.data,
+                left: removeNode(node.left, v),
+                right: node.right
+            }
+        }
+        if ( v > node.data) {
+            return {
+                data: node.data,
+                left: node.left,
+                right: removeNode(node.right, v)
+            }
+        }
+    }
+    this.rootNode = removeNode(this.rootNode, value)
   }
 
   min() {
     throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
-  }
 
+    // const checkMin = (node) => {
+    //   if (!node) { return null }
+    //   if (!node.left) { return node.data }
+    //   return checkMin(node.left)
+    // }
+    // return checkMin(this.rootNode)
+  }
+  
   max() {
     throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+
+    // const checkMax = (node) => {
+    //   if (!node) { return null }
+    //   if (!node.right) { return node.data }
+    //   return checkMax(node.right)
+    // }
+    // return checkMin(this.rootNode)
   }
 
 }
